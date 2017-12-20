@@ -2,6 +2,7 @@ package com.feng.surveypark.service.impl;
 
 
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,24 +11,27 @@ import org.springframework.stereotype.Service;
 
 import com.feng.surveypark.dao.BaseDao;
 import com.feng.surveypark.domain.User;
+import com.feng.surveypark.domain.security.Role;
+import com.feng.surveypark.service.RoleService;
 import com.feng.surveypark.service.UserService;
 import com.feng.surveypark.util.DataUtil;
+import com.feng.surveypark.util.StringUtil;
 import com.feng.surveypark.util.ValidateUtil;
 
 @Service("userService")
-public class UserServiceImpl extends BaseServiceImpl<User> implements
-		UserService {
-
+public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 	/**
-	 * 重新userDao,覆盖注解(non-Javadoc)
+	 * 重写userDao,覆盖
 	 */
 	
 	@Override
 	@Resource(name="userDao")
 	public void setDao(BaseDao<User> dao) {
-		// TODO Auto-generated method stub
 		super.setDao(dao);
 	}
+	
+	@Resource
+	private RoleService roleService;
 	
 
 	/**
@@ -62,10 +66,32 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements
 		return ValidateUtil.isValid(list)? list.get(0) : null;
 	}
 
-	
-	
-	
-	
 
+	/**
+	 * 修改用户授权
+	 */
+	@Override
+	public void updateAuthorize(User user, Integer[] ownRoleIds) {
+		//将数据同步补全
+		User uu = this.getEntity(user.getId());
+		if (!ValidateUtil.isValid(ownRoleIds)) {
+			uu.getRoles().clear();
+		}else {
+			String hql = "from Role r where r.id in ("+StringUtil.arr2Str(ownRoleIds)+")";
+			List<Role> roles = roleService.findEntityByHQL(hql);
+			uu.setRoles(new HashSet<Role>(roles));
+		}
+		
+	}
 
+	/**
+	 * 清除用户授权
+	 */
+	@Override
+	public void clearAuthorize(Integer userId) {
+		this.getEntity(userId).getRoles().clear();
+	}
+	
+	
+	
 }

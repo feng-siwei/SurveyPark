@@ -7,6 +7,7 @@
 		<link rel="stylesheet" type="text/css" href='<s:url value="/styles.css" />'>
 		<script type="text/javascript" src='<s:url value="/jquery-1.7.1.js" />' ></script>
 		<script type="text/javascript">
+		//点击删除后在disabled设置为disabled
 			$(function(){
 				$("a[href*=delete]").click(function(){
 					$(this).attr("disabled","disabled");
@@ -45,7 +46,7 @@
 					<tr>
 						<td><s:property value="id" /></td>
 						<td><s:property value="title" /></td>
-						<td><s:date name="createTime" format="MM/dd/yy HH:mm" /></td>
+						<td><s:date name="createTime" format="yy/MM/dd hh:mm" /></td>
 						<td>
 							<s:if test="closed">关闭</s:if>
 							<s:else>开放</s:else>

@@ -8,14 +8,24 @@ import java.util.Set;
  * 调查实体类
  */
 
-public class Survey {
-	private Integer id ; 
+public class Survey extends BaseEntity {
+	
+	private static final long serialVersionUID = -76059576681017711L;
+	
 	private String title= "未命名";
 	private String preText= "上一步";
 	private String nextText= "下一步";
 	private String exitText = "退出";
-	private String doneTextString = "完成";
+	private String doneText = "完成";
 	private Date createTime = new Date();
+	//开放锁
+	private boolean closed;
+	//logo图片上传路径
+	private String logoPhotoPath;
+	//最大页序
+	private float maxOrderno;
+	//最小页序
+	private float minOrderno;
 	
 	//建立调查与用户的多对一关系
 	private User user ;
@@ -34,13 +44,6 @@ public class Survey {
 		this.pages = pages;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getTitle() {
 		return title;
@@ -74,13 +77,7 @@ public class Survey {
 		this.exitText = exitText;
 	}
 
-	public String getDoneTextString() {
-		return doneTextString;
-	}
-
-	public void setDoneTextString(String doneTextString) {
-		this.doneTextString = doneTextString;
-	}
+	
 
 	public Date getCreateTime() {
 		return createTime;
@@ -96,6 +93,46 @@ public class Survey {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
+	}
+
+	public String getLogoPhotoPath() {
+		return logoPhotoPath;
+	}
+
+	public void setLogoPhotoPath(String logoPhotoPath) {
+		this.logoPhotoPath = logoPhotoPath;
+	}
+
+	public float getMaxOrderno() {
+		return maxOrderno;
+	}
+
+	public void setMaxOrderno(float maxOrderno) {
+		this.maxOrderno = maxOrderno;
+	}
+
+	public float getMinOrderno() {
+		return minOrderno;
+	}
+
+	public void setMinOrderno(float minOrderno) {
+		this.minOrderno = minOrderno;
+	}
+
+	public String getDoneText() {
+		return doneText;
+	}
+
+	public void setDoneText(String doneText) {
+		this.doneText = doneText;
 	}
 	
 	

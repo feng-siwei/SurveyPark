@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache-3.2.xsd">
+<!-- 已失效,整合到spring.xml文件中 -->
+
+	<description>EhCache缓存配置管理文件</description>
+	
+	<!-- 缓存管理器工厂 -->
+	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+	</bean>
+	<!-- EhCache缓存管理器 -->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache" />
+	</bean>
+
+
+	<!-- 启用缓存注解开关 -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<!-- 缓存通知 -->
+	<cache:advice id="cacheAdvice" cache-manager="cacheManager">
+		<cache:caching cache="surveyCache">
+			<!-- 添加缓存 -->
+			<cache:cacheable method="get*"/>
+			<cache:cacheable method="load*"/>
+			<cache:cacheable method="find*"/>
+			<cache:cacheable method="is*"/>
+			
+			<!-- 移除缓存, all-entries 移除所有条目-->
+			<cache:cache-evict method="save*" all-entries="true"/>
+			<cache:cache-evict method="update*" all-entries="true"/>
+			<cache:cache-evict method="delete*" all-entries="true"/>
+			<cache:cache-evict method="batch*" all-entries="true"/>
+		</cache:caching>
+	</cache:advice>
+	
+	
+</beans>

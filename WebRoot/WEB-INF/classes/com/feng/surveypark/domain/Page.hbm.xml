@@ -9,13 +9,16 @@
 		</id>
 		<property name="title" column="title" type="string" length="200" />
 		<property name="description" column="description" type="string" length="250" />
-
+		<property name="orderno" type="float">
+			<!-- 使用column子元素 好处可以指定数据字段类型 -->
+			<column name="orderno" sql-type="decimal(10,5)"></column>
+		</property>
 		
 		<!-- 映射页面到调查的多对一关系 -->
 		<many-to-one name="survey" class="Survey" column="surveyid"></many-to-one>
 		
 		<!-- 建立页面到问题的一对多关系 -->
-		<set name="questions" inverse="true">
+		<set name="questions" inverse="true" order-by="id">
 			<key column="pageid" />
 			<one-to-many class="Question"/>
 		</set>
