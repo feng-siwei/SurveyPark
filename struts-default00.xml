@@ -273,7 +273,10 @@
                  until at least the ID parameter has been loaded. By loading
                  the parameters twice, you can retrieve the object in the
                  prepare() method, allowing the second params interceptor to
-                 apply the values on the object. -->
+                 apply the values on the object.
+                 
+                 	预备参数拦截器
+                  -->
             <interceptor-stack name="paramsPrepareParamsStack">
                 <interceptor-ref name="exception"/>
                 <interceptor-ref name="alias"/>
@@ -313,6 +316,8 @@
                  This stack also excludes from the normal validation and workflow
                  the method names input, back, and cancel. These typically are
                  associated with requests that should not be validated.
+                 
+                 	默认拦截器,注意预备参数问题
                  -->
             <interceptor-stack name="defaultStack">
                 <interceptor-ref name="exception"/>
