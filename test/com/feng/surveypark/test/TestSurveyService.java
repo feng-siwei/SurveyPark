@@ -31,4 +31,12 @@ public class TestSurveyService {
 //		ss.newSurvey(user);
 	}
 	
+	@Test
+	public void getSurvey() {
+		SurveyService ss = (SurveyService)ac.getBean("surveyService");
+		ss.getSurvey(12);
+		System.out.println(ss.getSurvey(12).getMaxOrderno());
+		
+	}
+	
 }

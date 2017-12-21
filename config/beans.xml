@@ -4,6 +4,7 @@
     xmlns:context="http://www.springframework.org/schema/context"
     xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:cache="http://www.springframework.org/schema/cache"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -12,14 +13,19 @@
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd
-        ">
-<!-- 组件扫描 -->
-	<context:component-scan base-package="com.feng.surveypark.dao.impl,com.feng.surveypark.service.impl,com.feng.surveypark.struts2.action"/>
-<!-- 分散配置 --> 
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache-3.2.xsd"
+        >
+        
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="com.feng.surveypark.dao.impl
+	,com.feng.surveypark.service.impl,com.feng.surveypark.struts2.action
+	,com.feng.surveypark.listener"/>
+	<!-- 分散配置 --> 
 	 <context:property-placeholder location="classpath:jdbc.properties"/>
 	 
-<!-- 数据源是使用  数据池用c3p0-->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+	<!-- 数据源 主库  数据池c3p0 -->
+	<bean id="dataSource_main" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${jdbc.driverClass}" />
 		<property name="jdbcUrl" value="${jdbc.url}" />
 		<property name="user" value="${jdbc.username}" />
@@ -32,11 +38,27 @@
 		<property name="acquireIncrement" value="${c3p0.pool.size.increment}" />
 	</bean>
 	
+	<!-- 数据源 从库 -->
+	<bean id="dataSource_1" parent="dataSource_main">
+		<property name="jdbcUrl" value="${jdbc.url_1}" />
+	</bean>
+	
+	<!-- 数据库路由器 -->
+	<bean id="dataSource_router" class="com.feng.surveypark.datasource.SurveyParkDateSourceRouter">
+		<property name="targetDataSources">
+			<map>
+				<entry key="odd" value-ref="dataSource_main" />			
+				<entry key="even" value-ref="dataSource_1" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSource_main"/>
+	</bean>
+	
 	
 	<!-- 本地会话工厂, spring整合hibernate 核心入口 -->
 	<bean id = "sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<!-- 数据源 -->
-		<property name="dataSource" ref="dataSource"/>
+		<property name="dataSource" ref="dataSource_router"/>
 		<!--指定配置文件-->
 		<property name="configLocation" value="classpath:hibernate.cfg.xml"/>
 		<!-- 映射文件目录 -->
@@ -74,9 +96,79 @@
 		</tx:attributes>
 	</tx:advice>
 	
-	<!-- aop事物配置 -->
+	
+	<!-- 日志记录器 -->
+	<bean id="logger" class="com.feng.surveypark.advice.Logger">
+		<property name="logService" ref="logService"/>
+	</bean>
+	 
+	 
+	<!-- 缓存相关  -->
+	<!-- 缓存管理器工厂 -->
+	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+	</bean>
+	<!-- EhCache缓存管理器 -->
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache" />
+	</bean>
+	<!-- 启用缓存注解开关 -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+
+	<!-- 自定义缓存key生成器 -->
+	<bean id="surveyKeyGenerator" class="com.feng.surveypark.cache.SurveyKeyGenerator"></bean>
+	<!-- 缓存通知 -->
+	<cache:advice id="cacheAdvice" cache-manager="cacheManager"
+					 key-generator="surveyKeyGenerator">
+		<cache:caching cache="surveyCache">
+			<!-- 添加缓存 -->
+			<cache:cacheable method="get*"/>  
+			<cache:cacheable method="load*"/>
+			<cache:cacheable method="find*"/>
+			<cache:cacheable method="is*"/>
+			
+			<!-- 移除缓存, all-entries 移除所有条目-->
+			<cache:cache-evict method="save*" all-entries="true"/>
+			<cache:cache-evict method="update*" all-entries="true"/>
+			<cache:cache-evict method="delete*" all-entries="true"/>
+			<cache:cache-evict method="batch*" all-entries="true"/>
+		</cache:caching>
+	</cache:advice>
+	
+	
+	
+	<!-- aop配置 -->
 	<aop:config>
-		<aop:advisor advice-ref="txAdvice" pointcut="execution(* *..*Service.*(..))"/>
+		<!-- 事物切入点 pointcut切入点(织入点)-->
+		<aop:pointcut expression="execution(* *..*Service.*(..))" id="txPointcut"/>
+		<!-- 日志切入点	-->			
+		<aop:pointcut expression="(execution(* *..*Service.save*(..))
+								or execution(* *..*Service.update*(..))
+								or execution(* *..*Service.delete*(..))
+								or execution(* *..*Service.batch*(..))
+								or execution(* *..*Service.new*(..))
+								or execution(* *..*Service.clear*(..))
+								) and !bean(logService)" 
+							id="logPointcut"/>
+							
+		<!-- 缓存切入点 只限于SurveyService的方法-->
+		<aop:pointcut expression="execution(* com.feng.surveypark.service.impl.SurveyServiceImpl.*(..))" 
+								id="cachePointcut"/>	
+								
+												
+		<!-- 事物通知器  advice(通知器) -->	 	
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" order="2"/>
+		 
+		 <!-- 缓存通知器 -->	
+		<aop:advisor advice-ref="cacheAdvice" pointcut-ref="cachePointcut" order="0"/>
+		 
+		<!-- 配置日志切面 aspect切面 -->
+		<aop:aspect id="loggerAdvisor" ref="logger" order="1">
+			<aop:around method="record" pointcut-ref="logPointcut"/>
+		</aop:aspect>
+		
+		
+		
 	</aop:config>
 	
 	

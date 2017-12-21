@@ -12,15 +12,23 @@
 		<property name="preText" column="preText" type="string" length="50" />
 		<property name="nextText" column="nextText" type="string" length="50" />
 		<property name="exitText" column="exitText" type="string" length="50" />
-		<property name="doneTextString" column="doneTextString" type="string" length="50" />
+		<property name="doneText" column="doneText" type="string" length="50" />
 		
 		<property name="createTime" column="createTime" type="timestamp" update="false" />
+		<!-- 通过update="false",阻止update和saveOrUpdate方法的更新,但不能阻止hql语句的更新 -->
+		<property name="closed" column="closed" type="boolean" update="false"/>		
+		<property name="logoPhotoPath" column="logophotopath" type="string" length="200" update="false" />
 		
+		<!--  通过公式查询最大和最小页序 -->
+		<property name="maxOrderno" formula="(select max(p.orderno) from pages p where p.surveyid = id)" />	
+		<property name="minOrderno" formula="(select min(p.orderno) from pages p where p.surveyid = id)" />
+
+		  
 		<!-- 映射调查到用户的多对一关系 -->
 		<many-to-one name="user" class="User" column="userid"></many-to-one>
 		
 		<!-- 映射调查到页面的一对多关系   -->
-		<set name="pages" inverse="true">
+		<set name="pages" inverse="true" order-by="orderno">
 			<key column="surveyid"/>
 			<one-to-many class="Page"/>
 		</set>

@@ -10,19 +10,16 @@ import com.feng.surveypark.domain.User;
 import com.feng.surveypark.service.UserService;
 import com.feng.surveypark.util.ValidateUtil;
 
+/**
+ * 注册Action
+ * @author feng3
+ *
+ */
 @Controller
 @Scope("prototype")
 public class RegAction extends BaseAction<User> {
-	
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3967733843994178084L;
 
-	
-	
 	//获得确认密码
 	private String confirmPassword;	
 	

@@ -27,7 +27,9 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 
 	}
 	
-	//实例化model,方法同BaseDaoImpl
+	/**
+	 * 实例化model,方法同BaseDaoImpl
+	 */
 	public BaseAction() {
 		try {
 			ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
@@ -39,8 +41,6 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 			e.printStackTrace();
 		}
 	}
-
-
 
 	@Override
 	public  T getModel() {

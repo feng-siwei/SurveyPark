@@ -1,5 +1,6 @@
 package com.feng.surveypark.service.impl;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,6 +12,14 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	private BaseDao<T> dao ; 
 	
+	private Class<T> clazz ;
+	
+	@SuppressWarnings("unchecked")
+	public BaseServiceImpl(){
+		ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
+		clazz =  (Class<T>) type.getActualTypeArguments()[0];
+	}
+	
 	//注入dao
 	@Resource 
 	public void setDao(BaseDao<T> dao) {
@@ -19,7 +28,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	@Override
 	public void saveEntity(T t) {
-		dao.sayeEntity(t);
+		dao.saveEntity(t);
 
 	}
 
@@ -30,7 +39,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
 	@Override
 	public void sayeOrUpdateEntity(T t) {
-		dao.sayeOrUpdateEntity(t);
+		dao.saveOrUpdateEntity(t);
 	}
 
 	@Override
@@ -43,6 +52,12 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 		dao.batchEntityByHQL(hql, objects);
 	}
 
+	@Override
+	public void executeSQL(String sql, Object... objects) {
+		dao.executeSQL(sql, objects);
+		
+	}
+	
 	@Override
 	public T getEntity(Integer id) {
 		return dao.getEntity(id);
@@ -57,5 +72,26 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 	public List<T> findEntityByHQL(String hql, Object... objects) {
 		return dao.findEntityByHQL(hql, objects);
 	}
+
+	//单值检索(只有一个结果)
+	@Override
+	public Object uniqueResult(String hql, Object... objects) {
+		return dao.uniqueResult(hql, objects);
+	}
+	
+	//原生sql查询
+	@Override
+	public List<T> findObjectBySQL(String sql, Object... objects) {
+		return dao.findObjectBySQL(sql, objects);
+	}
+
+	//查询全部实体
+	@Override
+	public List<T> findAllEntities() {
+		String hql = "from "+clazz.getSimpleName();
+		return this.findEntityByHQL(hql);
+	}
+
+	
 
 }

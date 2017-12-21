@@ -2,19 +2,35 @@ package com.feng.surveypark.domain;
 
 import java.util.HashSet;
 import java.util.Set;
-
-public class Page {
-	private Integer id ; 
-	private String title = "未命名" ;
-	private String description;
+/**
+ * 页面实体
+ * @author 冯思伟
+ *
+ */
+public class Page extends BaseEntity {
+	private static final long serialVersionUID = -8025828543839877526L;
 	
-	//调查
-	private Survey survey;
+	private String title = "未命名";
+	//描述
+	private String description;
+	//页序
+	private float orderno;
+	
+	//调查 属性中的transient 属性,断开深度复制的链条
+	private transient Survey survey;
 	//问题
 	private Set<Question> questions = new HashSet<Question>();
 	
+	//对setID进行重构以便初始化ID时可以将页序初始化
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
+		if (id!=null) {
+			this.orderno = id;
+		}
+	}
 	
-	
+
 	public Set<Question> getQuestions() {
 		return questions;
 	}
@@ -27,12 +43,7 @@ public class Page {
 	public void setSurvey(Survey survey) {
 		this.survey = survey;
 	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -44,6 +55,12 @@ public class Page {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public float getOrderno() {
+		return orderno;
+	}
+	public void setOrderno(float orderno) {
+		this.orderno = orderno;
 	}
 	
 	

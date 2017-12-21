@@ -13,6 +13,19 @@ public interface UserService extends BaseService<User> {
 	 * 验证登入信息
 	 */
 	User validateLoginInfo(String email, String password);
+	
+	/**
+	 * 修改用户授权
+	 * @param user 用户
+	 * @param ownRoleIds 权限id数组
+	 */
+	void updateAuthorize(User user, Integer[] ownRoleIds);
+
+	/**
+	 * 清除用户授权
+	 * @param userId 用户id
+	 */
+	void clearAuthorize(Integer userId);
 
 	
 }
