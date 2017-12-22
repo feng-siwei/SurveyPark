@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.feng.surveypark.domain.User;
+import com.feng.surveypark.service.RightService;
 import com.feng.surveypark.service.UserService;
 
 /**
@@ -18,14 +19,14 @@ import com.feng.surveypark.service.UserService;
   
 @Controller
 @Scope("prototype")
-public class LoginAction extends BaseAction<User> implements SessionAware {
-
-	
+public class LoginAction extends BaseAction<User> implements SessionAware {	
 	private static final long serialVersionUID = -44954064920241948L;
 
 	@Resource
 	private UserService userService;
-
+	@Resource
+	private RightService rightService;
+	
 	//接收session 的 map
 	private Map<String, Object> sessionMap;
 	
@@ -34,24 +35,27 @@ public class LoginAction extends BaseAction<User> implements SessionAware {
 		return "longinPage";
 	}
 	
-	public String doLogin() {
-		
-		return SUCCESS;
-		
+	public String doLogin() {	
+		return SUCCESS;	
 	}
 	
 	//validate拦截器出来用@SkipValidation指定不用校验的也可以通过名字指定校验
-	
 	public void validateDoDoLogin() {		
 		User user = userService.validateLoginInfo(model.getEmail(),model.getPassword());
 		if (user == null) {
 			//失败
 			addActionError("邮箱或密码错误~~~");
 		} else {
-			//成功
+			//计算用户授权
+			int maxRightPos = rightService.getMaxRightPos();
+			user.setRightSum(new long[maxRightPos+1]);
+			//计算用户权限总和
+			user.calculateRightSum();
+			
+			//将用户放入session
 //			方法一:原生方法
 //			HttpSession s = ServletActionContext.getRequest().getSession();
-//			s.setAttribute(arg0, arg1);
+//			s.setAttribute("sessionName",Object);
 //			方法二:实现SessionAware接口方法
 			sessionMap.put("user", user);
 		}

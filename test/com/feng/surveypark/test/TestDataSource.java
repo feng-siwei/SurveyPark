@@ -17,7 +17,6 @@ public class TestDataSource {
 	
 
 	
-	@SuppressWarnings("resource")
 	@Test
 	public void getConn() throws Exception{
 		

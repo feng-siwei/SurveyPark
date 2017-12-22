@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+     
+     <!-- 任务明细,对石英任务进行包装 -->   
+	<bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.feng.surveypark.schedule.GenerateLogsTableTask"/>
+		<property name="jobDataMap">
+			<map>
+				<entry key="logService" value-ref="logService" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- cron触发器,设置调度策略 -->
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	 	<property name="jobDetail" ref="jobDetail" />
+	 	<!-- cron表达式 -->
+	 	<property name="cronExpression">
+	 		<value>0 0 0 15 * ? *</value>
+	 	</property>
+	</bean>
+	
+	<!-- 调度器,激活触发器 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<ref bean="cronTrigger"/>
+		</property>
+	</bean>
+
+</beans>

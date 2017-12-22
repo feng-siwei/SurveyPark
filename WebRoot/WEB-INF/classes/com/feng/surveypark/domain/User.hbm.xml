@@ -11,5 +11,10 @@
 		<property name="password" column="password" type="string" length="50" />
 		<property name="nickName" column="nickname" type="string" length="50" />
 		<property name="regDate" column="regdate" type="timestamp" update="false" />
+		
+		<set name="roles" table="user_role_link" lazy="false">
+			<key column="userid"/>
+			<many-to-many class="com.feng.surveypark.domain.security.Role" column="rolesid"/>
+		</set>
 	</class>
 </hibernate-mapping>

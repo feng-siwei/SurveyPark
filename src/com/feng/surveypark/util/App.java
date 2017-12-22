@@ -2,6 +2,7 @@ package com.feng.surveypark.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 public class App {
 	/**
@@ -25,5 +26,10 @@ public class App {
 		}
 		System.out.println(buffer.toString());
 		
+		String uuid = UUID.randomUUID().toString() ;
+		System.out.println(uuid +"长度为"+uuid.length() );
+		
+		uuid = "[Answer:{id:null, answerIds:2, questionId:4, surveyId:12, }, Answer:{id:null, answerIds:other, otherAnswer:第二题的其他, questionId:2, surveyId:12, }, Answer:{id:null, answerIds:1, otherAnswer:第一题, questionId:1, surveyId:12, }, Answer:{id:null, answerIds:other, questionId:3, surveyId:12, }]" ;
+		System.out.println(uuid +"长度为"+uuid.length() );
 	}
 }

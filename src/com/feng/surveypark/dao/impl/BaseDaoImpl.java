@@ -6,7 +6,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+
 
 
 
@@ -34,7 +36,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
-	public void sayeEntity(T t) {
+	public void saveEntity(T t) {
 		sf.getCurrentSession().save(t);
 	}
 
@@ -44,7 +46,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	@Override
-	public void sayeOrUpdateEntity(T t) {
+	public void saveOrUpdateEntity(T t) {
 		sf.getCurrentSession().saveOrUpdate(t);
 	}
 
@@ -62,6 +64,18 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		query.executeUpdate();
 	}
 
+	//通过原生SQL实现
+	@Override
+	public void executeSQL(String sql, Object... objects) {
+		SQLQuery query = sf.getCurrentSession().createSQLQuery(sql);
+		for (int i = 0 ; i<objects.length ; i++) {
+			query.setParameter(i, objects[i]);
+		}
+		query.executeUpdate();
+		
+	}
+
+	
 	@Override
 	public T getEntity(Integer id) {
 		
@@ -80,7 +94,37 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		for (int i = 0 ; i<objects.length ; i++) {
 			query.setParameter(i, objects[i]);
 		}
+		
+		return query.list();
+	}
+	
+	//单值检索
+	@Override
+	public Object uniqueResult(String hql, Object...objects){
+		Query query = sf.getCurrentSession().createQuery(hql);
+		for (int i = 0 ; i<objects.length ; i++) {
+			query.setParameter(i, objects[i]);
+		}
+		
+		return query.uniqueResult();
+	}
+
+	/**
+	 * 通过原生SQL查询
+	 */
+	@Override
+	public List<T> findObjectBySQL(String sql, Object... objects) {
+		SQLQuery query = sf.getCurrentSession().createSQLQuery(sql);
+		for (int i = 0 ; i<objects.length ; i++) {
+			query.setParameter(i, objects[i]);
+		}
+		/*添加实体,因为sql查询出的是对象数组(一个个的字符串数组)
+		 * 添加实体后可以对象数组转化为实体
+		 */
+		query.addEntity(clazz);
 		return query.list();
 	}
 
+
+	
 }
