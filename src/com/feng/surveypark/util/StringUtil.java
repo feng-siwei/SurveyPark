@@ -47,6 +47,7 @@ public class StringUtil {
 			}
 			return temp.substring(0, temp.length()-1);
 		}
+//		Arrays.toString(value);
 		return null;
 	}
 

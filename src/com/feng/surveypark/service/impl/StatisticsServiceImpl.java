@@ -14,6 +14,7 @@ import com.feng.surveypark.service.StatisticsService;
 
 /**
  * 统计服务类
+ * 需要对外进行公开
  * @author feng3
  *
  */
