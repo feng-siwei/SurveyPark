@@ -49,11 +49,14 @@ public class ChartOutputAction extends BaseAction<Question> {
 
 	
 	private Integer qid;
+	private Integer sid;
+	
 	//图标类型
 	private int chartType; 
 	
 	@Resource
 	private StatisticsService statisticsService;
+	
 	
 	@Override
 	public String execute() throws Exception {
@@ -68,7 +71,13 @@ public class ChartOutputAction extends BaseAction<Question> {
 			//字体设置
 			Font songTi = new Font("宋体", 0, 20);
 			//数据统计
-			QuestionStatisticsModel qsm = statisticsService.statistics(qid);
+			
+			//绑定令牌到当前线程中去
+//			SurveyToken token = new SurveyToken();
+//			token.setCurrentSurvey(surveyService.getSurvey(sid));
+//			SurveyToken.bindingToken(token);
+			
+			QuestionStatisticsModel qsm = statisticsService.statistics(qid,sid);
 			
 			//饼图
 			DefaultPieDataset pieds = null;
@@ -177,6 +186,14 @@ public class ChartOutputAction extends BaseAction<Question> {
 
 	public void setChartType(int chartType) {
 		this.chartType = chartType;
+	}
+
+	public Integer getSid() {
+		return sid;
+	}
+
+	public void setSid(Integer sid) {
+		this.sid = sid;
 	}
 	
 }

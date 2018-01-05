@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.feng.surveypark.datasource.SurveyToken;
 import com.feng.surveypark.domain.Answer;
 import com.feng.surveypark.domain.Question;
 import com.feng.surveypark.service.SurveyService;
@@ -69,6 +70,12 @@ public class CollectSurveyAction extends BaseAction<Question> {
 			String oldUuid = "";
 			String newUuid = "";
 			int rownum = 0;
+			
+			//绑定令牌到当前线程中去
+			SurveyToken token = new SurveyToken();
+			token.setCurrentSurvey(surveyService.getSurvey(sid));
+			SurveyToken.bindingToken(token);
+			
 			List<Answer> answers = surveyService.findAnswers(sid);
 			for (Answer answer : answers) {
 				newUuid = answer.getUuid();

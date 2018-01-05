@@ -30,7 +30,7 @@ public class StatisticsServiceImpl implements StatisticsService{
 	 * 
 	 */
 	@Override
-	public QuestionStatisticsModel statistics(Integer qid) {
+	public QuestionStatisticsModel statistics(Integer qid,Integer sid) {
 		QuestionStatisticsModel qsm = new QuestionStatisticsModel();
 		Question question = questionDao.getEntity(qid);
 		qsm.setQuestion(question);

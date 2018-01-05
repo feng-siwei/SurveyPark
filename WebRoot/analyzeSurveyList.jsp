@@ -4,13 +4,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>设计调查</title>
+		<title>分析调查</title>
 		<link rel="stylesheet" type="text/css" href='<s:url value="/styles.css" />'>
 		<script type="text/javascript" src="<s:url value="/jquery-1.7.1.js" />"></script>
 	</head>
 	<body>
 		<s:include value="/header.jsp" />
-		<s:set var="sId" value="id" />
+		<s:set var="sId" value="sid" />
 		<table>
 				<tr>
 					<td colspan="2" class="tdWhiteLine"></td>
@@ -48,6 +48,7 @@
 										<td class="tdQHeaderR" style="border-bottom: 1px solid white">
 											<s:form action="ChartOutputAction" namespace="/" method="post" target="_blank">
 												<input type="hidden" name="qid" value='<s:property value="#qId" />'>
+												<input type="hidden" name="sid" value='<s:property value="#sId" />'>
 												<!-- 判断当前题型是否矩阵式题型 -->
 												<s:if test='#qt > 5 '>										
 													<input type="submit" formaction="MatrixStatisticsAction"  value="查看矩阵式问题统计结果" class="btn"/>

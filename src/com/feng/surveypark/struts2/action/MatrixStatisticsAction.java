@@ -26,6 +26,7 @@ public class MatrixStatisticsAction extends BaseAction<Question> {
 	private StatisticsService statisticsService ;
 	
 	private Integer qid;
+	private Integer sid;
 	private QuestionStatisticsModel qsm ;
 	private String[] colors = {
 			"#ff0000",
@@ -40,7 +41,7 @@ public class MatrixStatisticsAction extends BaseAction<Question> {
 	
 	@Override
 	public String execute() throws Exception {
-		this.qsm = statisticsService.statistics(qid);
+		this.qsm = statisticsService.statistics(qid,sid);
 		return ""+qsm.getQuestion().getQuestionType();
 	}
 	
@@ -133,6 +134,14 @@ public class MatrixStatisticsAction extends BaseAction<Question> {
 
 	public void setColors(String[] colors) {
 		this.colors = colors;
+	}
+
+	public Integer getSid() {
+		return sid;
+	}
+
+	public void setSid(Integer sid) {
+		this.sid = sid;
 	}
 	
 }

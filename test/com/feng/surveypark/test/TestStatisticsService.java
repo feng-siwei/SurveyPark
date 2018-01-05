@@ -23,7 +23,7 @@ public class TestStatisticsService {
 	@Test
 	public void statistics() {
 		StatisticsService  ss = (StatisticsService)ac.getBean("statisticsService");
-		ss.statistics(19);
+		ss.statistics(19,null);
 	}
 	
 }
