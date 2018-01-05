@@ -13,8 +13,8 @@ import com.opensymphony.xwork2.ActionContext;
 
 /**
  * 日志记录器
+ * 使用spring的aop织入
  * @author 冯思伟
- *
  */
 public class Logger {
 
