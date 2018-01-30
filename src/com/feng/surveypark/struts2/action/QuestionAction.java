@@ -59,6 +59,7 @@ public class QuestionAction extends BaseAction<Question> {
 	public String editQuestion() {
 		this.model = surveyService.getQuestion(qid);
 		return""+model.getQuestionType();
+		
 	}
 	
 	/**

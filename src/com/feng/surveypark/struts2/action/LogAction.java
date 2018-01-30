@@ -16,7 +16,7 @@ import com.feng.surveypark.util.StringUtil;
 public class LogAction extends BaseAction<Log> {
 	private static final long serialVersionUID = -1724456723847081901L;
 
-	@Resource
+	@Resource                                               
 	private LogService logService;
 	
 	private List<Log> allLogs;
