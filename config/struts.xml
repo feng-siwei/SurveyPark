@@ -35,7 +35,7 @@
 		
 		<!-- 全局结果 -->
 		<global-results>
-			<result name="login">/index.jsp</result>
+			<result name="login">/login.jsp</result>
 			<result name="no_tight_error">/index.jsp</result>
 			<!-- 设计调查重定向 -->
 			<result name = "designSurveyAction" type="redirectAction">
@@ -49,14 +49,14 @@
  		<!-- 注册Action -->
  		<action name="RegAction_*" class="regAction" method="{1}">
  			<result name = "regPage">/reg.jsp</result>
- 			<result name = "success">/index.jsp</result>
+ 			<result name = "success">/login.jsp</result>
  			<result name = "input">/reg.jsp</result>		
  		</action>
  		<!-- 登入Action -->
  		<action name="LoginAction_*" class="loginAction" method="{1}">
- 			<result name = "longinPage">/index.jsp</result>
- 			<result name = "success">/index.jsp</result>
- 			<result name = "input">/index.jsp</result>			
+ 			<result name = "longinPage">/login.jsp</result>
+ 			<result name = "success">/login.jsp</result>
+ 			<result name = "input">/login.jsp</result>			
  		</action>
  		<!-- 调查Action -->
  		<action name="SurveyAction_*" class="surveyAction" method="{1}">
