@@ -83,10 +83,10 @@ a{
 	background-color: rgb(51,153,255);color: white;text-align: right;border-width: 0px;
 }
 .tdQHeaderL{
-	text-align: left;border: 0px;background-color: rgb(128,0,128);color: white;padding-left: 10px;
+	text-align: left;border: 0px;background-color: rgb(51,193,255);color: white;padding-left: 10px;
 }
 .tdQHeaderR{
-	text-align: right;border: 0px;background-color: rgb(128,0,128);color: white;
+	text-align: right;border: 0px;background-color: rgb(51,192,255);color: white;
 }
 .tdOptionArea{
 	text-align: left;;
