@@ -51,7 +51,7 @@
 												<input type="hidden" name="sid" value='<s:property value="#sId" />'>
 												<!-- 判断当前题型是否矩阵式题型 -->
 												<s:if test='#qt > 5 '>										
-													<input type="submit" formaction="MatrixStatisticsAction"  value="查看矩阵式问题统计结果" class="btn"/>
+													<input type="submit" formaction="MatrixStatisticsAction.action"  value="查看矩阵式问题统计结果" class="btn"/>
 												</s:if>
 												<s:elseif test='#qt lt 5'>
 													<s:set var="chartList" value="#{0:'平面饼图',

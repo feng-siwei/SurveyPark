@@ -10,24 +10,20 @@ import com.feng.surveypark.domain.Survey;
  */
 public class SurveyToken {
 	private Survey currentSurvey;
-	private static ThreadLocal<SurveyToken> threadLocal = new ThreadLocal<SurveyToken>();
-	
+	private static ThreadLocal<SurveyToken> threadLocal = new ThreadLocal<SurveyToken>();	
 	/**
 	 * 将令牌对象绑定到当前线程
 	 * @param token 令牌
 	 */
 	public static void bindingToken(SurveyToken token) {
 		threadLocal.set(token);
-	}
-	
+	}	
 	/**
 	 * 从当前线程中取出令牌
-	 * @return
 	 */
 	public static SurveyToken getCurrenToken() {
 		return threadLocal.get();
-	}
-	
+	}	
 	/**
 	 * 解除令牌绑定 
 	 */

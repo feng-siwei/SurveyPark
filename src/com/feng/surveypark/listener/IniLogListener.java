@@ -16,10 +16,8 @@ import com.feng.surveypark.util.LogUtil;
 @SuppressWarnings("rawtypes")
 @Component
 public class IniLogListener implements ApplicationListener {
-
 	@Resource
 	private LogService logService;
-	
 	
 	@Override
 	public void onApplicationEvent(ApplicationEvent arg0) {

@@ -33,13 +33,7 @@ public class LogServiceImpl extends BaseServiceImpl<Log> implements LogService {
 	public void saveEntity(Log log) {
 		String sql = "insert into "+LogUtil.generateLogTableName(0)
 				+"(id,operator,opertime,opername,operparams,operresult,resultmsg) values(?,?,?,?,?,?,?)";
-	
-//		HttpSession session = ServletActionContext.getRequest().getSession();
-//		SessionImplementor session = new sessi
-		
-		String uuid = UUID.randomUUID().toString();
-		
-		
+		String uuid = UUID.randomUUID().toString();		
 		this.executeSQL(sql,uuid,log.getOperator(),log.getOperTime(),log.getOperName(),
 				log.getOperParams(),log.getOperResult(),log.getResultMsg());
 	}

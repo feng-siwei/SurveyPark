@@ -64,7 +64,7 @@ public abstract class BaseDaoImpl<T> implements BaseDao<T> {
 		query.executeUpdate();
 	}
 
-	//通过原生SQL实现
+	//执行原生的sql语句
 	@Override
 	public void executeSQL(String sql, Object... objects) {
 		SQLQuery query = sf.getCurrentSession().createSQLQuery(sql);

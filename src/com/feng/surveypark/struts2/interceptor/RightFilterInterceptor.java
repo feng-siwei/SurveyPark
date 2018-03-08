@@ -16,20 +16,12 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  *
  */
 public class RightFilterInterceptor implements Interceptor {
-
-
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4076442132177742773L;
-
 	@Override
 	public void destroy() {
 		// TODO 自动生成的方法存根
 			
 	}
-
 	@Override
 	public void init() {
 		// TODO 自动生成的方法存根
