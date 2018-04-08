@@ -11,7 +11,9 @@
 		
 		<s:form action="LoginAction_doLogin" namespace="/" method="post">
 		<table>
-			
+			<tr>
+				<td colspan="10" style="height: 5px"></td>
+			</tr>
 			<tr>
 				<td class="tdHeader" colspan="2">用户登陆</td>
 			</tr>

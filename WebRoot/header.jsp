@@ -22,7 +22,7 @@
 			<div >
 				<div class="divNavigatorInnerFrame" style="text-align: right;">
 					欢迎<s:property value="#session['user'].nickName" />&nbsp;
-					<s:a action="LogAction_findAllLogs" namespace="/" >注销</s:a>&nbsp;
+					<s:a action="LoginAction_logout" namespace="/" >注销</s:a>&nbsp;
 				</div>
 
 			</div>

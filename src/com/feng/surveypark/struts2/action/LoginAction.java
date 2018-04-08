@@ -39,7 +39,15 @@ public class LoginAction extends BaseAction<User> implements SessionAware {
 		return SUCCESS;	
 	}
 	
-	//validate拦截器出来用@SkipValidation指定不用校验的也可以通过名字指定校验
+/*
+ * validate拦截器
+ * 方法一:
+ * 直接使用validate做方法名
+ * 用@SkipValidation注解加到不需要验证方法前,指定不用校验的方法
+ * 方法二:
+ * 使用validate(Do)方法名,针对该方法前运行.
+ */
+	
 	public void validateDoDoLogin() {		
 		User user = userService.validateLoginInfo(model.getEmail(),model.getPassword());
 		if (user == null) {
@@ -61,6 +69,12 @@ public class LoginAction extends BaseAction<User> implements SessionAware {
 		}
 	}
 
+//	注销
+	public String logout() {
+		sessionMap.put("user", null);
+		return "index";	
+	}
+	
 	//注入 session 的 map
 	@Override
 	public void setSession(Map<String, Object> sessionMap) {

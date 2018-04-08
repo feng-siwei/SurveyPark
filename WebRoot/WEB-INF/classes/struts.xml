@@ -36,6 +36,7 @@
 		<!-- 全局结果 -->
 		<global-results>
 			<result name="login">/login.jsp</result>
+			<result name="index">/index.jsp</result>
 			<result name="no_tight_error">/index.jsp</result>
 			<!-- 设计调查重定向 -->
 			<result name = "designSurveyAction" type="redirectAction">
@@ -55,7 +56,11 @@
  		<!-- 登入Action -->
  		<action name="LoginAction_*" class="loginAction" method="{1}">
  			<result name = "longinPage">/login.jsp</result>
- 			<result name = "success">/login.jsp</result>
+ 			<!-- 登入成功重定向调查列表页面 -->
+			<result name = "success" type="redirectAction">
+ 				<param name="namespace">/</param> 
+ 				<param name="actionName">EngageSurveyAction_findAllAvailadleSurveys</param>
+ 			</result>
  			<result name = "input">/login.jsp</result>			
  		</action>
  		<!-- 调查Action -->

@@ -79,6 +79,7 @@ public class ValidateUtil {
 //		System.out.println(right.getRightName());
 		
 		User user = (User) session.getAttribute("user");
+//		如果权限位空或者权限位公共资源放行
 		if (right == null || right.isCommon()) {
 			return true;
 		}else {
