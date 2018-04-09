@@ -70,8 +70,22 @@ public class PageAction extends BaseAction<Page> {
 	public String deletePage() {
 		surveyService.deletePage(pid);
 		return"designSurveyAction";
-		
 	}
+	/**
+	 * 在删除页面前检查是否是最后的一个页面,如果是禁止删除
+	 * @return
+	 */
+	public void validateDoDeletePage() {
+		long pagecount = surveyService.getPageCount(sid);
+		boolean isOnePage = pagecount<2;   
+		System.out.println("每次拦截结果"+isOnePage);
+		if (isOnePage) {
+			System.out.println("进入结果");
+			//最后的页面
+			addActionError("每个调查必须至少有一个页面");
+		}
+	}
+	
 	
 //	get,set___________________________________________________________
 	public Integer getSid() {

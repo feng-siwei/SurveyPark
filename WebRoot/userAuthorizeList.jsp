@@ -14,14 +14,6 @@
 	</head>
 	<body>
 		<s:include value="/header.jsp" />
-		<table>
-			<tr>
-				<td colspan="10" style="height: 5px"></td>
-			</tr>
-			<tr>
-				<td colspan="10" style="height: 5px"></td>
-			</tr>
-		</table>
 		<s:if test="allUsers.isEmpty() == true">目前没有任何用户!</s:if >
 		<s:else>
 			<table>

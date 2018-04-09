@@ -306,7 +306,16 @@ public class SurveyServiceImpl implements SurveyService {
 				+ "order by orderno desc";
 		return pageDao.findEntityByHQL(hql, targPage.getOrderno(), targPage.getSurvey().getId()).get(0);
 	}
-
+	
+	/**
+	 * 获得总页数
+	 */
+	public long getPageCount (Integer sid) {
+		String hql = "select count(p) from Page p where p.survey.id = ?";
+		return (long) surveyDao.uniqueResult(hql, sid);
+	}
+	
+	
 	/**
 	 * 是否是尾页
 	 */

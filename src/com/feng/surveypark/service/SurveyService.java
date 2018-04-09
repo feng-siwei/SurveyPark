@@ -121,6 +121,11 @@ public interface SurveyService {
 	public Page getFirstPage(Integer sid);
 	
 	/**
+	 * 查询总页数
+	 */
+	public long getPageCount(Integer sid); 
+	
+	/**
 	 * 通过页面ID下一页
 	 */
 	public Page getNextPage(Integer currPid);

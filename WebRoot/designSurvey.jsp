@@ -59,6 +59,8 @@
 														<!-- 页面标题 -->
 														<td class="tdPHeaderL"><s:property value="#p.title" /></td>
 														<td class="tdPHeaderR">
+															11
+															<s:actionerror></s:actionerror>
 															<s:a action="PageAction_editPage?sid=%{#sId}&pid=%{#pId}" namespace="/">编辑页标题</s:a>&nbsp;
 															<s:a action="MoveOrCopyPageAction_toSelectTargetPage?srcPid=%{#pId}" namespace="/">移动/复制页</s:a>&nbsp;
 															<s:a action="QuestionAction_toSelectQuestionType?sid=%{#sId}&pid=%{#pId}" namespace="/">增加问题</s:a>&nbsp;

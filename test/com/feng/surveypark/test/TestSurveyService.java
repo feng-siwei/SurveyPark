@@ -39,4 +39,12 @@ public class TestSurveyService {
 		
 	}
 	
+	@Test
+	public void getPageCount() {
+		SurveyService ss = (SurveyService)ac.getBean("surveyService");
+		long pagecount = ss.getPageCount(19);
+		boolean isOnePage = pagecount<2;                            
+		System.out.println("id为19的调查 总页数为"+isOnePage);
+		
+	}
 }

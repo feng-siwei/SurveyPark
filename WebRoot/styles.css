@@ -22,8 +22,12 @@ table{
 	border-width:0px;border-collapse: collapse;height: 100%;width: 100%;
 }
 td{
-	border:1px solid blue;font-family: Courier New;font-size: 15px;
-	vertical-align: middle;white-space: nowrap;height: 20px;
+	border:1px solid blue;
+	font-family: Courier New;
+	font-size: 15px;
+	vertical-align: middle;
+	white-space: nowrap;
+	height: 20px;
 }
 
 
@@ -90,7 +94,10 @@ a{
 }
 
 .tdHeader{
-	background-color: blue;text-align: left;color: white;padding-left:10px;
+	background-color: rgb(51,102,255);
+	text-align: left;
+	color: white;
+	padding-left:10px;
 	filter:alpha(opacity=70,style=1)
 }
 .tdSHeaderL{
@@ -137,4 +144,9 @@ a{
 
 .fonterror{
 	font-family: Courier New;font-size: 15px;color: red;
+}
+
+.centered{
+  margin-left: auto;
+  margin-right: auto; 
 }
