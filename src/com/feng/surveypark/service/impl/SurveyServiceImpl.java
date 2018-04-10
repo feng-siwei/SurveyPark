@@ -410,7 +410,8 @@ public class SurveyServiceImpl implements SurveyService {
 	@Override
 	public List<Answer> findAnswers(Integer sid) {
 		String hql = "from Answer a where a.surveyId = ? order by a.uuid";
-		return answerDao.findEntityByHQL(hql, sid);
+		List<Answer> answers = answerDao.findEntityByHQL(hql, sid);		
+		return answers;
 	}
 	
 }

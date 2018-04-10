@@ -27,13 +27,15 @@ public class StatisticsServiceImpl implements StatisticsService{
 	private AnswerDaoImpl answerDao;
 	/**
 	 * 统计问题
-	 * 
+	 * 废弃
+	 * 因为需要分库查询,在同一事物下,将会产生无法改变数据库.所以拆分成两个方法
 	 */
 	@Override
 	public QuestionStatisticsModel statistics(Integer qid,Integer sid) {
 		QuestionStatisticsModel qsm = new QuestionStatisticsModel();
 		Question question = questionDao.getEntity(qid);
 		qsm.setQuestion(question);
+		
 		String hql = "select count(*) from Answer a where a.questionId=? ";
 		int count = ((Long)answerDao.uniqueResult(hql, qid)).intValue();
 		qsm.setCount(count);
@@ -121,5 +123,104 @@ public class StatisticsServiceImpl implements StatisticsService{
 		}
 		return qsm;
 	}
-	
+	@Override
+	public QuestionStatisticsModel statisticQuestion(Integer qid,Integer sid) {
+		QuestionStatisticsModel qsm = new QuestionStatisticsModel();
+		Question question = questionDao.getEntity(qid);
+		qsm.setQuestion(question);
+		return qsm;
+		
+	}
+	@Override
+	public QuestionStatisticsModel statisticAnswer(Integer qid,Integer sid,QuestionStatisticsModel qsm) {
+		//获得question
+		Question question = qsm.getQuestion();
+		//获得总人数
+		String hql = "select count(*) from Answer a where a.questionId=? ";
+		int count = ((Long)answerDao.uniqueResult(hql, qid)).intValue();
+		qsm.setCount(count);
+		
+		//统计选项人数
+		int optCount = 0;
+		String hql1 = "select count(*) from Answer a where a.questionId=?"
+				+ "and concat(',',a.answerIds,',') like ?";
+		
+		int qt = question.getQuestionType();
+		switch (qt) {
+			//非矩阵
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				String[] optArr = question.getOptionArr();
+				
+				OptionStatisticsModel osm = null;
+				//统计每个选项人数
+				for (int i = 0; i < optArr.length; i++) {
+					osm = new OptionStatisticsModel();
+					osm.setOptionLabel(optArr[i]);
+					osm.setOptionIndex(i);
+					optCount = ((Long)answerDao.uniqueResult(hql1, qid, "%,"+i+",%")).intValue();
+					osm.setCount(optCount);
+					qsm.getOsms().add(osm);
+				}
+				//对其他选项处理
+				if (question.isOther()) {
+					osm = new OptionStatisticsModel();
+					osm.setOptionLabel("其他");
+					optCount = ((Long)answerDao.uniqueResult(hql1, qid, "%other%")).intValue();
+					osm.setCount(optCount);
+					qsm.getOsms().add(osm);
+				}
+				
+				break;
+				
+			//矩阵	
+			case 6:
+			case 7:
+			case 8:
+				//行
+				String[] rows = question.getMatrixRowTitleArr();
+				//列
+				String[] cols = question.getMatrixColTitleArr();
+				//下拉
+				String[] opts = question.getMatrixSelectOptionArr();
+				for (int i = 0; i < rows.length; i++) {
+					for (int j = 0; j < cols.length; j++) {
+						//非下拉框
+						if (qt != 8) {
+							osm = new OptionStatisticsModel();
+							osm.setMatrixRowLabel(rows[i]);
+							osm.setMatrixRowIndex(i);
+							osm.setMatrixColLabel(cols[j]);
+							osm.setMatrixColIndex(j);
+							optCount = ((Long)answerDao.uniqueResult(hql1, qid, "%,"+ i +"_"+ j +",%")).intValue();
+							osm.setCount(optCount);
+							qsm.getOsms().add(osm);				
+						}
+						//下拉框
+						else {
+							for (int k = 0; k < opts.length; k++) {
+								osm = new OptionStatisticsModel();
+								osm.setMatrixRowLabel(rows[i]);
+								osm.setMatrixRowIndex(i);
+								osm.setMatrixColLabel(cols[j]);
+								osm.setMatrixColIndex(j);
+								osm.setMatrixSelectLabel(opts[k]);
+								osm.setMatrixSelectIndex(k);
+								optCount = ((Long)answerDao.uniqueResult(hql1, qid, "%,"+ i +"_"+ j +"_"+ k +",%")).intValue();
+								osm.setCount(optCount);
+								qsm.getOsms().add(osm);
+							}				
+						}
+					}
+					
+				}
+				
+				break;
+		}
+		return qsm;
+		
+	}
 }

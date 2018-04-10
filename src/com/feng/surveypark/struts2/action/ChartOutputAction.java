@@ -15,10 +15,12 @@ import org.jfree.util.Rotation;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.feng.surveypark.datasource.SurveyToken;
 import com.feng.surveypark.domain.Question;
 import com.feng.surveypark.domain.statistics.OptionStatisticsModel;
 import com.feng.surveypark.domain.statistics.QuestionStatisticsModel;
 import com.feng.surveypark.service.StatisticsService;
+import com.feng.surveypark.service.SurveyService;
 
 /**
  * 图标生成Action
@@ -51,6 +53,9 @@ public class ChartOutputAction extends BaseAction<Question> {
 	private Integer qid;
 	private Integer sid;
 	
+	@Resource
+	private SurveyService surveyService ;
+	
 	//图标类型
 	private int chartType; 
 	
@@ -72,12 +77,15 @@ public class ChartOutputAction extends BaseAction<Question> {
 			Font songTi = new Font("宋体", 0, 20);
 			//数据统计
 			
-			//绑定令牌到当前线程中去
-//			SurveyToken token = new SurveyToken();
-//			token.setCurrentSurvey(surveyService.getSurvey(sid));
-//			SurveyToken.bindingToken(token);
+			//获得问题项
+			QuestionStatisticsModel qsm = statisticsService.statisticQuestion(qid, sid);
 			
-			QuestionStatisticsModel qsm = statisticsService.statistics(qid,sid);
+			//绑定令牌到当前线程中去
+			SurveyToken token = new SurveyToken();
+			token.setCurrentSurvey(surveyService.getSurvey(sid));
+			SurveyToken.bindingToken(token);
+			//获得答案项
+			qsm = statisticsService.statisticAnswer(qid, sid, qsm);
 			
 			//饼图
 			DefaultPieDataset pieds = null;
@@ -86,6 +94,7 @@ public class ChartOutputAction extends BaseAction<Question> {
 			
 			//构造数据集
 			if (chartType<2) {
+				//饼图
 				pieds = new DefaultPieDataset();
 				for (OptionStatisticsModel osm : qsm.getOsms()) {
 					pieds.setValue(osm.getOptionLabel(), osm.getCount());

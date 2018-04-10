@@ -13,9 +13,11 @@ public class SurveyParkDateSourceRouter extends AbstractRoutingDataSource {
 	protected Object determineCurrentLookupKey() {
 		SurveyToken token = SurveyToken.getCurrenToken();
 		if (token != null) {
-			int id =token.getCurrentSurvey().getId();
+			int id =token.getCurrentSurvey().getId();	
+			
 			//解除令牌绑定,防止下次数据链接请求路由到同一目标
 			SurveyToken.unbinadToken();
+
 			return (id % 2) == 1 ? "odd": "even" ;  
 		}
 		return null;
