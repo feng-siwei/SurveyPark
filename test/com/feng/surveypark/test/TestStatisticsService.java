@@ -8,10 +8,6 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.feng.surveypark.service.StatisticsService;
-
-
-
 public class TestStatisticsService {
 	private static ApplicationContext ac = null;
 	
@@ -22,8 +18,7 @@ public class TestStatisticsService {
 	
 	@Test
 	public void statistics() {
-		StatisticsService  ss = (StatisticsService)ac.getBean("statisticsService");
-		ss.statistics(19,null);
+		System.out.println(ac);
 	}
 	
 }

@@ -7,13 +7,16 @@ import javax.annotation.Resource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.feng.surveypark.datasource.SurveyToken;
 import com.feng.surveypark.domain.Question;
 import com.feng.surveypark.domain.statistics.OptionStatisticsModel;
 import com.feng.surveypark.domain.statistics.QuestionStatisticsModel;
 import com.feng.surveypark.service.StatisticsService;
+import com.feng.surveypark.service.SurveyService;
 
 /**
  * 复杂选项的统计处理
+ * 
  * @author feng3
  *
  */
@@ -24,6 +27,8 @@ public class MatrixStatisticsAction extends BaseAction<Question> {
 	
 	@Resource
 	private StatisticsService statisticsService ;
+	@Resource
+	private SurveyService surveyService;
 	
 	private Integer qid;
 	private Integer sid;
@@ -41,7 +46,17 @@ public class MatrixStatisticsAction extends BaseAction<Question> {
 	
 	@Override
 	public String execute() throws Exception {
-		this.qsm = statisticsService.statistics(qid,sid);
+//		this.qsm = statisticsService.statistics(qid,sid);
+		//获得问题项
+		this.qsm = statisticsService.statisticQuestion(qid, sid);
+	
+		//绑定令牌到当前线程中去
+		SurveyToken token = new SurveyToken();
+		token.setCurrentSurvey(surveyService.getSurvey(sid));
+		SurveyToken.bindingToken(token);
+		//获得答案项
+		this.qsm = statisticsService.statisticAnswer(qid, sid, qsm);
+		
 		return ""+qsm.getQuestion().getQuestionType();
 	}
 	

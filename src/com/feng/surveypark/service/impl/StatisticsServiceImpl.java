@@ -29,7 +29,7 @@ public class StatisticsServiceImpl implements StatisticsService{
 	 * 统计问题
 	 * 废弃
 	 * 因为需要分库查询,在同一事物下,将会产生无法改变数据库.所以拆分成两个方法
-	 */
+
 	@Override
 	public QuestionStatisticsModel statistics(Integer qid,Integer sid) {
 		QuestionStatisticsModel qsm = new QuestionStatisticsModel();
@@ -123,6 +123,8 @@ public class StatisticsServiceImpl implements StatisticsService{
 		}
 		return qsm;
 	}
+	 */
+	
 	@Override
 	public QuestionStatisticsModel statisticQuestion(Integer qid,Integer sid) {
 		QuestionStatisticsModel qsm = new QuestionStatisticsModel();

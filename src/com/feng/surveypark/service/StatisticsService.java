@@ -6,7 +6,7 @@ import com.feng.surveypark.domain.statistics.QuestionStatisticsModel;
 
 @WebService
 public interface StatisticsService {
-	public QuestionStatisticsModel statistics(Integer qid, Integer sid);
+//	public QuestionStatisticsModel statistics(Integer qid, Integer sid);
 	
 	public QuestionStatisticsModel statisticQuestion(Integer qid, Integer sid);
 
