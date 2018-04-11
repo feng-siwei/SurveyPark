@@ -21,12 +21,17 @@ public class LogAction extends BaseAction<Log> {
 	
 	private List<Log> allLogs;
 
-//	查看所有日志
+//	查看最近日志
 	public String findAllLogs() {
 		this.allLogs = logService.findNearestLogs();
 		return "logListPage";
 	}
 	
+//	查看最近日志
+	public String findNearestLogs() {
+		this.allLogs = logService.findNearestLogs();
+		return "logListPage";
+	}
 	
 	
 	
